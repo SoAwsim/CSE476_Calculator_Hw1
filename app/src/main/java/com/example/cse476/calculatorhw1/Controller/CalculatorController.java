@@ -28,7 +28,12 @@ public class CalculatorController {
     }
 
     public void Delete() {
+        var text = this._formulaView.getText();
+        if (text.length() == 0)
+            return;
 
+        text = text.subSequence(0, text.length() - 1);
+        this._formulaView.setText(text);
     }
 
     public void Calculate() {
