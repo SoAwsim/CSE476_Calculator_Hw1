@@ -14,6 +14,13 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.3" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/empty_area_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
@@ -25,52 +32,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_operation_openpar"
+        android:id="@+id/button_empty"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="("
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@+id/button_number_7"
-        app:layout_constraintEnd_toStartOf="@+id/button_operation_closepar"
+        app:layout_constraintEnd_toStartOf="@+id/empty_area_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline_result_area" />
-
-    <Button
-        android:id="@+id/button_operation_closepar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:text=")"
-        app:layout_constraintBottom_toTopOf="@+id/button_number_8"
-        app:layout_constraintEnd_toStartOf="@+id/button_operation_percent"
-        app:layout_constraintStart_toEndOf="@+id/button_operation_openpar"
-        app:layout_constraintTop_toTopOf="@id/guideline_result_area" />
-
-    <Button
-        android:id="@+id/button_operation_percent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="%"
-        app:layout_constraintBottom_toTopOf="@+id/button_number_9"
-        app:layout_constraintEnd_toStartOf="@+id/button_operation_divide"
-        app:layout_constraintStart_toEndOf="@+id/button_operation_closepar"
-        app:layout_constraintTop_toTopOf="@id/guideline_result_area" />
+        app:layout_constraintTop_toTopOf="@id/guideline_result_area"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
         android:id="@+id/button_operation_divide"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="/"
         app:layout_constraintBottom_toTopOf="@+id/button_operation_multiply"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_operation_percent"
+        app:layout_constraintStart_toEndOf="@+id/empty_area_guideline"
         app:layout_constraintTop_toTopOf="@id/guideline_result_area" />
 
     <Button
@@ -78,36 +60,39 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="7"
         app:layout_constraintBottom_toTopOf="@+id/button_number_4"
         app:layout_constraintEnd_toStartOf="@+id/button_number_8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_operation_openpar"/>
+        app:layout_constraintTop_toBottomOf="@id/button_empty" />
 
     <Button
         android:id="@+id/button_number_8"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="8"
         app:layout_constraintBottom_toTopOf="@+id/button_number_5"
         app:layout_constraintEnd_toStartOf="@+id/button_number_9"
         app:layout_constraintStart_toEndOf="@+id/button_number_7"
-        app:layout_constraintTop_toBottomOf="@id/button_operation_closepar" />
+        app:layout_constraintTop_toBottomOf="@id/button_empty" />
 
     <Button
         android:id="@+id/button_number_9"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="9"
         app:layout_constraintBottom_toTopOf="@+id/button_number_6"
         app:layout_constraintEnd_toStartOf="@+id/button_operation_multiply"
         app:layout_constraintStart_toEndOf="@+id/button_number_8"
-        app:layout_constraintTop_toBottomOf="@id/button_operation_percent" />
+        app:layout_constraintTop_toBottomOf="@id/button_empty" />
 
     <Button
         android:id="@+id/button_operation_multiply"
