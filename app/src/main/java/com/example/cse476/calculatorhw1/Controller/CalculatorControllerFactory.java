@@ -1,7 +1,9 @@
 package com.example.cse476.calculatorhw1.Controller;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
 import com.example.cse476.calculatorhw1.Calculator.Calculator;
@@ -19,6 +21,11 @@ public class CalculatorControllerFactory {
         var calculator = new Calculator();
         TextView formulaView = this._activity.findViewById(R.id.textView);
         this._calculatorController = new CalculatorController(calculator, formulaView);
+
+        HorizontalScrollView scrollView = this._activity.findViewById(R.id.formula_scroller);
+        formulaView
+                .getViewTreeObserver()
+                .addOnGlobalLayoutListener(() -> scrollView.fullScroll(View.FOCUS_RIGHT));
 
         this.InitializeDigitButtons();
         this.InitializeOperatorButtons();
