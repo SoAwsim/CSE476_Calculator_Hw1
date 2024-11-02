@@ -1,5 +1,6 @@
 package com.example.cse476.calculatorhw1.Controller;
 
+import android.annotation.SuppressLint;
 import android.widget.TextView;
 
 import com.example.cse476.calculatorhw1.Calculator.Calculator;
@@ -13,8 +14,9 @@ public class CalculatorController {
         this._formulaView = formulaView;
     }
 
+    @SuppressLint("SetTextI18n")
     public void EnterDigit(int digit) {
-
+        this._formulaView.setText(this._formulaView.getText().toString() + digit);
     }
 
     public void EnterOperation(char operation) {
