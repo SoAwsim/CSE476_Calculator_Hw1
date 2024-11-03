@@ -86,7 +86,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:padding="0dp"
-        android:text="Sqrt"
+        android:text="√"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonNumber7"
         app:layout_constraintEnd_toStartOf="@+id/buttonOperationDivide"
