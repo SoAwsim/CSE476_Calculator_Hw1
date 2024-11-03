@@ -15,22 +15,9 @@ public class Calculator implements ICalculator {
             int operationIndexToProcess;
             boolean operationIsMultiply;
 
-            if (indexOfMultiplicationOperation >= 0 && indexOfDivisionOperation < 0) {
-                operationIndexToProcess = indexOfMultiplicationOperation;
-                operationIsMultiply = true;
-            }
-            else if (indexOfMultiplicationOperation < 0) {
-                operationIndexToProcess = indexOfDivisionOperation;
-                operationIsMultiply = false;
-            }
-            else if (indexOfMultiplicationOperation < indexOfDivisionOperation) {
-                operationIndexToProcess = indexOfMultiplicationOperation;
-                operationIsMultiply = true;
-            }
-            else {
-                operationIndexToProcess = indexOfDivisionOperation;
-                operationIsMultiply = false;
-            }
+            operationIndexToProcess = DetermineNextOperationIsMultiplyOrDivision(
+                    indexOfMultiplicationOperation, indexOfDivisionOperation);
+            operationIsMultiply = operationIndexToProcess == indexOfMultiplicationOperation;
 
             var leftNumberStart = ICalculator.FindIndexOfLastOperation(
                     formula.substring(0, operationIndexToProcess)) + 1;
@@ -82,5 +69,20 @@ public class Calculator implements ICalculator {
 
     private static void SolveAdditionAndSubtraction(StringBuilder formula) {
 
+    }
+
+    private static int DetermineNextOperationIsMultiplyOrDivision(
+            int indexOfMultiplicationOperation,
+            int indexOfDivisionOperation
+    ) {
+        if (indexOfMultiplicationOperation >= 0 && indexOfDivisionOperation < 0) {
+            return indexOfMultiplicationOperation;
+        }
+
+        if (indexOfMultiplicationOperation < 0) {
+            return indexOfDivisionOperation;
+        }
+
+        return Math.min(indexOfMultiplicationOperation, indexOfDivisionOperation);
     }
 }
