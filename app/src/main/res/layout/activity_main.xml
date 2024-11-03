@@ -14,13 +14,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="69dp" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/emptyAreaGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
-
     <HorizontalScrollView
         android:id="@+id/formulaScroller"
         android:layout_width="0dp"
@@ -47,10 +40,57 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:padding="0dp"
+        android:text="cos"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonNumber7"
-        app:layout_constraintEnd_toStartOf="@+id/emptyAreaGuideline"
+        app:layout_constraintEnd_toStartOf="@+id/buttonOperationSin"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guidelineResultArea"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/buttonOperationSin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="5dp"
+        android:text="sin"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNumber7"
+        app:layout_constraintEnd_toStartOf="@+id/buttonOperationLog"
+        app:layout_constraintStart_toEndOf="@id/buttonOperationCos"
+        app:layout_constraintTop_toTopOf="@id/guidelineResultArea"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/buttonOperationLog"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="0dp"
+        android:text="log"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNumber7"
+        app:layout_constraintEnd_toStartOf="@+id/buttonOperationSqrt"
+        app:layout_constraintStart_toEndOf="@id/buttonOperationSin"
+        app:layout_constraintTop_toTopOf="@id/guidelineResultArea"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/buttonOperationSqrt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="0dp"
+        android:text="Sqrt"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNumber7"
+        app:layout_constraintEnd_toStartOf="@+id/buttonOperationDivide"
+        app:layout_constraintStart_toEndOf="@id/buttonOperationLog"
         app:layout_constraintTop_toTopOf="@id/guidelineResultArea"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -58,13 +98,14 @@
         android:id="@+id/buttonOperationDivide"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="/"
         android:textSize="50sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonOperationMultiply"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/emptyAreaGuideline"
+        app:layout_constraintStart_toEndOf="@+id/buttonOperationSqrt"
         app:layout_constraintTop_toTopOf="@id/guidelineResultArea" />
 
     <Button
