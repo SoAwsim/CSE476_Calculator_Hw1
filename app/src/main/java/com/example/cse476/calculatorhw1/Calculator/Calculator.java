@@ -1,48 +1,32 @@
 package com.example.cse476.calculatorhw1.Calculator;
 
 public class Calculator implements ICalculator {
+    private StringBuilder _currentFormula;
+
     @Override
     public void SolveFormula(StringBuilder formula) throws ArithmeticException, NumberFormatException {
-        SolveMultiplicationAndDivision(formula);
-        SolveAdditionAndSubtraction(formula);
+        this._currentFormula = formula;
+        this.SolveMultiplicationAndDivision();
+        this.SolveAdditionAndSubtraction();
     }
 
-    private static void SolveMultiplicationAndDivision(StringBuilder formula) {
-        var indexOfMultiplicationOperation = formula.indexOf("x");
-        var indexOfDivisionOperation = formula.indexOf("/");
+    private void SolveMultiplicationAndDivision() {
+        var indexOfMultiplicationOperation = this._currentFormula.indexOf("x");
+        var indexOfDivisionOperation = this._currentFormula.indexOf("/");
 
         while (indexOfMultiplicationOperation >= 0 || indexOfDivisionOperation >= 0) {
-            int operationIndexToProcess;
-            boolean operationIsMultiply;
-
-            operationIndexToProcess = DetermineNextOperationIsMultiplyOrDivision(
+            var operationIndexToProcess = DetermineNextOperationIsMultiplyOrDivision(
                     indexOfMultiplicationOperation, indexOfDivisionOperation);
-            operationIsMultiply = operationIndexToProcess == indexOfMultiplicationOperation;
+            var operationIsMultiply = operationIndexToProcess == indexOfMultiplicationOperation;
 
-            var leftNumberStart = ICalculator.FindIndexOfLastOperation(
-                    formula.substring(0, operationIndexToProcess)) + 1;
-            if (leftNumberStart != 0 && formula.charAt(leftNumberStart - 1) == '-')
-                leftNumberStart--;
-
-            var rightNumberEnd = ICalculator.FindIndexOfFirstOperation(formula.substring(operationIndexToProcess + 1));
-            if (rightNumberEnd == -1) {
-                rightNumberEnd = formula.length();
-            }
-            else {
-                rightNumberEnd = rightNumberEnd + operationIndexToProcess + 1;
-                if (formula.charAt(rightNumberEnd) == '-' && (rightNumberEnd - 1) == operationIndexToProcess) {
-                    var newIndex = ICalculator.FindIndexOfFirstOperation(formula.substring(rightNumberEnd + 1));
-                    if (newIndex == -1)
-                        rightNumberEnd = formula.length();
-                    else
-                        rightNumberEnd = newIndex + rightNumberEnd + 1;
-                }
-            }
+            var constraints = new MathOperationConstraints(operationIndexToProcess);
 
             var leftNumber = Double.parseDouble(
-                    formula.substring(leftNumberStart, operationIndexToProcess));
+                    this._currentFormula.substring(
+                            constraints.LeftNumberStartIndex, operationIndexToProcess));
             var rightNumber = Double.parseDouble(
-                    formula.substring(operationIndexToProcess + 1, rightNumberEnd));
+                    this._currentFormula.substring(
+                            operationIndexToProcess + 1, constraints.RightNumberEndIndex));
 
             double result;
             if (operationIsMultiply)
@@ -50,22 +34,18 @@ public class Calculator implements ICalculator {
             else
                 result = leftNumber / rightNumber;
 
-            ValidateAndWriteResult(formula, result, leftNumberStart, rightNumberEnd);
+            this.ValidateAndWriteResult(result, constraints);
 
-            indexOfMultiplicationOperation = formula.indexOf("x");
-            indexOfDivisionOperation = formula.indexOf("/");
+            indexOfMultiplicationOperation = this._currentFormula.indexOf("x");
+            indexOfDivisionOperation = this._currentFormula.indexOf("/");
         }
     }
 
-    private static void SolveAdditionAndSubtraction(StringBuilder formula) {
+    private void SolveAdditionAndSubtraction() {
 
     }
 
-    private static void ValidateAndWriteResult(
-            StringBuilder formula,
-            double result,
-            int startIndex,
-            int endIndex) {
+    private void ValidateAndWriteResult(double result, MathOperationConstraints constraints) {
         // throw ArithmeticException they are both treated as NaN
         if (Double.isNaN(result) || Double.isInfinite(result))
             throw new ArithmeticException();
@@ -76,7 +56,10 @@ public class Calculator implements ICalculator {
         else
             resultAsObject = result;
 
-        formula.replace(startIndex, endIndex, resultAsObject.toString());
+        this._currentFormula.replace(
+                constraints.LeftNumberStartIndex,
+                constraints.RightNumberEndIndex,
+                resultAsObject.toString());
     }
 
     private static int DetermineNextOperationIsMultiplyOrDivision(
@@ -91,5 +74,37 @@ public class Calculator implements ICalculator {
         }
 
         return Math.min(indexOfMultiplicationOperation, indexOfDivisionOperation);
+    }
+
+    private class MathOperationConstraints {
+        public int LeftNumberStartIndex;
+        public int RightNumberEndIndex;
+
+        public MathOperationConstraints(int operationIndex) {
+            this.LeftNumberStartIndex = ICalculator.FindIndexOfLastOperation(
+                    _currentFormula.substring(0, operationIndex)) + 1;
+            if (this.LeftNumberStartIndex != 0 && _currentFormula.charAt(this.LeftNumberStartIndex - 1) == '-')
+                this.LeftNumberStartIndex--;
+
+            this.RightNumberEndIndex = ICalculator.FindIndexOfFirstOperation(
+                    _currentFormula.substring(operationIndex + 1));
+            if (this.RightNumberEndIndex == -1) {
+                this.RightNumberEndIndex = _currentFormula.length();
+            }
+            else {
+                this.RightNumberEndIndex = this.RightNumberEndIndex + operationIndex + 1;
+                if (
+                        _currentFormula.charAt(this.RightNumberEndIndex) == '-' &&
+                        (this.RightNumberEndIndex - 1) == operationIndex
+                ) {
+                    var newIndex = ICalculator.FindIndexOfFirstOperation(
+                            _currentFormula.substring(this.RightNumberEndIndex + 1));
+                    if (newIndex == -1)
+                        this.RightNumberEndIndex = _currentFormula.length();
+                    else
+                        this.RightNumberEndIndex = newIndex + this.RightNumberEndIndex + 1;
+                }
+            }
+        }
     }
 }
