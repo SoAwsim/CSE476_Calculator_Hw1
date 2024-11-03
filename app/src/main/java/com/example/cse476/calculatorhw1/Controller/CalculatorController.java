@@ -28,7 +28,20 @@ public class CalculatorController {
     }
 
     public void EnterOperation(char operation) {
+        if (this._operationState == OperationState.ALL_OPERATORS_BANNED)
+            return;
+
+        if (this._operationState == OperationState.MINUS_ALLOWED && operation != '-')
+            return;
+
+        // At this point operation is valid
         this._dotAllowed = false;
+        if (operation == '/' || operation == 'x')
+            this._operationState = OperationState.MINUS_ALLOWED;
+        else
+            this._operationState = OperationState.ALL_OPERATORS_BANNED;
+
+        this._formulaView.setText(this._formulaView.getText().toString() + operation);
     }
 
     public void EnterDot() {
@@ -79,7 +92,6 @@ public class CalculatorController {
         }
 
         var lastChar = formula.charAt(formula.length() - 1);
-
         if (Character.isDigit(lastChar))
             this._operationState = OperationState.ALL_OPERATORS_ALLOWED;
         else if (lastChar == '/' || lastChar == 'x')
