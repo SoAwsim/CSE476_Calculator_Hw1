@@ -9,8 +9,148 @@ public class Calculator implements ICalculator {
         if (this._currentFormula.length() == 0)
             return;
 
+        this.SolveExtraOperators();
         this.SolveMultiplicationAndDivision();
         this.SolveAdditionAndSubtraction();
+    }
+
+    private void SolveExtraOperators() {
+        this.SolveCosOperator();
+        this.SolveSinOperator();
+        this.SolveLogOperator();
+        this.SolveSqrtOperator();
+    }
+
+    private void SolveCosOperator() {
+        var indexOfCosOperator = this._currentFormula.indexOf("cos");
+
+        while (indexOfCosOperator >= 0) {
+            var startIndexOfOperatorNumber = indexOfCosOperator + 3;
+
+            int afterOperatorIndex;
+            var numberToAdd = 0;
+            if (this._currentFormula.charAt(startIndexOfOperatorNumber) == '-') {
+                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                        this._currentFormula.substring(startIndexOfOperatorNumber + 1));
+                if (afterOperatorIndex != -1)
+                    numberToAdd = 4;
+            }
+            else {
+                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                        this._currentFormula.substring(startIndexOfOperatorNumber));
+                if (afterOperatorIndex != -1)
+                    numberToAdd = 3;
+            }
+
+            if (numberToAdd == 0)
+                afterOperatorIndex = this._currentFormula.length();
+            else
+                afterOperatorIndex += numberToAdd;
+
+            var number = Double.parseDouble(
+                    this._currentFormula.substring(
+                            startIndexOfOperatorNumber, afterOperatorIndex));
+
+            var result = Math.cos(number);
+            ValidateAndWriteResult(
+                    result,
+                    new MathOperationConstraints(indexOfCosOperator, afterOperatorIndex));
+
+            indexOfCosOperator = this._currentFormula.indexOf("cos");
+        }
+    }
+
+    private void SolveSinOperator() {
+        var indexOfSinOperator = this._currentFormula.indexOf("sin");
+
+        while (indexOfSinOperator >= 0) {
+            var startIndexOfOperatorNumber = indexOfSinOperator + 3;
+
+            int afterOperatorIndex;
+            var numberToAdd = 0;
+            if (this._currentFormula.charAt(startIndexOfOperatorNumber) == '-') {
+                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                        this._currentFormula.substring(startIndexOfOperatorNumber + 1));
+                if (afterOperatorIndex != -1)
+                    numberToAdd = 4;
+            }
+            else {
+                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                        this._currentFormula.substring(startIndexOfOperatorNumber));
+                if (afterOperatorIndex != -1)
+                    numberToAdd = 3;
+            }
+
+            if (numberToAdd == 0)
+                afterOperatorIndex = this._currentFormula.length();
+            else
+                afterOperatorIndex += numberToAdd;
+
+            var number = Double.parseDouble(
+                    this._currentFormula.substring(
+                            startIndexOfOperatorNumber, afterOperatorIndex));
+
+            var result = Math.sin(number);
+            ValidateAndWriteResult(
+                    result,
+                    new MathOperationConstraints(indexOfSinOperator, afterOperatorIndex));
+
+            indexOfSinOperator = this._currentFormula.indexOf("sin");
+        }
+    }
+
+    private void SolveLogOperator() {
+        var indexOfLogOperator = this._currentFormula.indexOf("log");
+
+        while (indexOfLogOperator >= 0) {
+            var startIndexOfOperatorNumber = indexOfLogOperator + 3;
+
+            var afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                    this._currentFormula.substring(startIndexOfOperatorNumber));
+
+            if (afterOperatorIndex == -1)
+                afterOperatorIndex = this._currentFormula.length();
+            else
+                afterOperatorIndex += 3;
+
+            var number = Double.parseDouble(
+                    this._currentFormula.substring(
+                            startIndexOfOperatorNumber, afterOperatorIndex));
+
+            var result = Math.log10(number);
+            ValidateAndWriteResult(
+                    result,
+                    new MathOperationConstraints(indexOfLogOperator, afterOperatorIndex));
+
+            indexOfLogOperator = this._currentFormula.indexOf("log");
+        }
+    }
+
+    private void SolveSqrtOperator() {
+        var indexOfSqrtOperator = this._currentFormula.indexOf("√");
+
+        while (indexOfSqrtOperator >= 0) {
+            var startIndexOfOperatorNumber = indexOfSqrtOperator + 1;
+
+            var afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                    this._currentFormula.substring(startIndexOfOperatorNumber));
+
+            if (afterOperatorIndex == -1)
+                afterOperatorIndex = this._currentFormula.length();
+            else
+                afterOperatorIndex++;
+
+            var number = Double.parseDouble(
+                    this._currentFormula.substring(
+                            startIndexOfOperatorNumber, afterOperatorIndex));
+
+            var result = Math.sqrt(number);
+            ValidateAndWriteResult(
+                    result,
+                    new MathOperationConstraints(indexOfSqrtOperator, afterOperatorIndex));
+
+            indexOfSqrtOperator = this._currentFormula.indexOf("√");
+        }
     }
 
     private void SolveMultiplicationAndDivision() {
@@ -117,6 +257,11 @@ public class Calculator implements ICalculator {
     private class MathOperationConstraints {
         public int LeftNumberStartIndex;
         public int RightNumberEndIndex;
+
+        public MathOperationConstraints(int left, int right) {
+            this.LeftNumberStartIndex = left;
+            this.RightNumberEndIndex = right;
+        }
 
         public MathOperationConstraints(int operationIndex) {
             this.LeftNumberStartIndex = ICalculator.FindIndexOfLastOperation(
