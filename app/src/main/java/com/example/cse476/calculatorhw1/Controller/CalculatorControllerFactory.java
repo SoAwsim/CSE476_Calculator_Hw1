@@ -19,10 +19,10 @@ public class CalculatorControllerFactory {
     
     public void DefaultCalculatorController() {
         var calculator = new Calculator();
-        TextView formulaView = this._activity.findViewById(R.id.textView);
+        TextView formulaView = this._activity.findViewById(R.id.formulaView);
         this._calculatorController = new CalculatorController(calculator, formulaView);
 
-        HorizontalScrollView scrollView = this._activity.findViewById(R.id.formula_scroller);
+        HorizontalScrollView scrollView = this._activity.findViewById(R.id.formulaScroller);
         formulaView
                 .getViewTreeObserver()
                 .addOnGlobalLayoutListener(() -> scrollView.fullScroll(View.FOCUS_RIGHT));
@@ -33,58 +33,58 @@ public class CalculatorControllerFactory {
 
     private void InitializeDigitButtons() {
         Button button;
-        button = this._activity.findViewById(R.id.button_number_7);
+        button = this._activity.findViewById(R.id.buttonNumber7);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(7));
 
-        button = this._activity.findViewById(R.id.button_number_8);
+        button = this._activity.findViewById(R.id.buttonNumber8);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(8));
 
-        button = this._activity.findViewById(R.id.button_number_9);
+        button = this._activity.findViewById(R.id.buttonNumber9);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(9));
 
-        button = this._activity.findViewById(R.id.button_number_4);
+        button = this._activity.findViewById(R.id.buttonNumber4);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(4));
 
-        button = this._activity.findViewById(R.id.button_number_5);
+        button = this._activity.findViewById(R.id.buttonNumber5);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(5));
 
-        button = this._activity.findViewById(R.id.button_number_6);
+        button = this._activity.findViewById(R.id.buttonNumber6);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(6));
 
-        button = this._activity.findViewById(R.id.button_number_1);
+        button = this._activity.findViewById(R.id.buttonNumber1);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(1));
 
-        button = this._activity.findViewById(R.id.button_number_2);
+        button = this._activity.findViewById(R.id.buttonNumber2);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(2));
 
-        button = this._activity.findViewById(R.id.button_number_3);
+        button = this._activity.findViewById(R.id.buttonNumber3);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(3));
 
-        button = this._activity.findViewById(R.id.button_number_dot);
+        button = this._activity.findViewById(R.id.buttonNumberDot);
         button.setOnClickListener(v -> this._calculatorController.EnterDot());
 
-        button = this._activity.findViewById(R.id.button_number_0);
+        button = this._activity.findViewById(R.id.buttonNumber0);
         button.setOnClickListener(v -> this._calculatorController.EnterDigit(0));
     }
     
     private void InitializeOperatorButtons() {
         Button button;
-        button = this._activity.findViewById(R.id.button_operation_add);
+        button = this._activity.findViewById(R.id.buttonOperationAdd);
         button.setOnClickListener(v -> this._calculatorController.EnterOperation('+'));
 
-        button = this._activity.findViewById(R.id.button_operation_divide);
+        button = this._activity.findViewById(R.id.buttonOperationDivide);
         button.setOnClickListener(v -> this._calculatorController.EnterOperation('/'));
 
-        button = this._activity.findViewById(R.id.button_operation_multiply);
+        button = this._activity.findViewById(R.id.buttonOperationMultiply);
         button.setOnClickListener(v -> this._calculatorController.EnterOperation('x'));
 
-        button = this._activity.findViewById(R.id.button_operation_substract);
+        button = this._activity.findViewById(R.id.buttonOperationSubtract);
         button.setOnClickListener(v -> this._calculatorController.EnterOperation('-'));
 
-        button = this._activity.findViewById(R.id.button_operation_sum);
+        button = this._activity.findViewById(R.id.buttonOperationSum);
         button.setOnClickListener(v -> this._calculatorController.Calculate());
 
-        button = this._activity.findViewById(R.id.button_operation_delete);
+        button = this._activity.findViewById(R.id.buttonOperationDelete);
         button.setOnClickListener(v -> this._calculatorController.Delete());
         button.setOnLongClickListener(v -> {
             this._calculatorController.DeleteAll();
