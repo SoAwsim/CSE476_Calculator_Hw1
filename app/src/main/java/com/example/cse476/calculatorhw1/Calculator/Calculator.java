@@ -49,7 +49,7 @@ public class Calculator implements ICalculator {
 
         int indexOfSubtractionOperation;
         if (this._currentFormula.charAt(0) == '-')
-            indexOfSubtractionOperation = this._currentFormula.substring(1).indexOf("-");
+            indexOfSubtractionOperation = this._currentFormula.indexOf("-", 1);
         else
             indexOfSubtractionOperation = this._currentFormula.indexOf("-");
 
