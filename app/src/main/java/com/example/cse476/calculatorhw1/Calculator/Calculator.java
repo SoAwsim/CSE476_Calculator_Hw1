@@ -133,7 +133,7 @@ public class Calculator implements ICalculator {
                 this.RightNumberEndIndex = _currentFormula.length();
             }
             else {
-                this.RightNumberEndIndex = this.RightNumberEndIndex + operationIndex + 1;
+                this.RightNumberEndIndex += operationIndex + 1;
                 if (
                         _currentFormula.charAt(this.RightNumberEndIndex) == '-' &&
                         (this.RightNumberEndIndex - 1) == operationIndex
@@ -143,7 +143,7 @@ public class Calculator implements ICalculator {
                     if (newIndex == -1)
                         this.RightNumberEndIndex = _currentFormula.length();
                     else
-                        this.RightNumberEndIndex = newIndex + this.RightNumberEndIndex + 1;
+                        this.RightNumberEndIndex += newIndex + 1;
                 }
             }
         }
