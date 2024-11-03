@@ -50,17 +50,7 @@ public class Calculator implements ICalculator {
             else
                 result = leftNumber / rightNumber;
 
-            // throw ArithmeticException they are both treated as NaN
-            if (Double.isNaN(result) || Double.isInfinite(result))
-                throw new ArithmeticException();
-
-            Object resultAsObject;
-            if (Math.floor(result) == result)
-                resultAsObject = (int) result;
-            else
-                resultAsObject = result;
-
-            formula.replace(leftNumberStart, rightNumberEnd, resultAsObject.toString());
+            ValidateAndWriteResult(formula, result, leftNumberStart, rightNumberEnd);
 
             indexOfMultiplicationOperation = formula.indexOf("x");
             indexOfDivisionOperation = formula.indexOf("/");
@@ -71,10 +61,27 @@ public class Calculator implements ICalculator {
 
     }
 
+    private static void ValidateAndWriteResult(
+            StringBuilder formula,
+            double result,
+            int startIndex,
+            int endIndex) {
+        // throw ArithmeticException they are both treated as NaN
+        if (Double.isNaN(result) || Double.isInfinite(result))
+            throw new ArithmeticException();
+
+        Object resultAsObject;
+        if (Math.floor(result) == result)
+            resultAsObject = (long) result;
+        else
+            resultAsObject = result;
+
+        formula.replace(startIndex, endIndex, resultAsObject.toString());
+    }
+
     private static int DetermineNextOperationIsMultiplyOrDivision(
             int indexOfMultiplicationOperation,
-            int indexOfDivisionOperation
-    ) {
+            int indexOfDivisionOperation) {
         if (indexOfMultiplicationOperation >= 0 && indexOfDivisionOperation < 0) {
             return indexOfMultiplicationOperation;
         }
