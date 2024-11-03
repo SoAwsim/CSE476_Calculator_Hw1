@@ -64,6 +64,12 @@ public class CalculatorController {
         this._formulaView.setText(text);
     }
 
+    public void DeleteAll() {
+        this._dotAllowed = false;
+        this._operationState = OperationState.MINUS_ALLOWED;
+        this._formulaView.setText("");
+    }
+
     public void Calculate() {
 
     }

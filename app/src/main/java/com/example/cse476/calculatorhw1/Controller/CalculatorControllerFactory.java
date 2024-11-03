@@ -86,5 +86,9 @@ public class CalculatorControllerFactory {
 
         button = this._activity.findViewById(R.id.button_operation_delete);
         button.setOnClickListener(v -> this._calculatorController.Delete());
+        button.setOnLongClickListener(v -> {
+            this._calculatorController.DeleteAll();
+            return true;
+        });
     }
 }
