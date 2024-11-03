@@ -90,5 +90,17 @@ public class CalculatorControllerFactory {
             this._calculatorController.DeleteAll();
             return true;
         });
+
+        button = this._activity.findViewById(R.id.buttonOperationCos);
+        button.setOnClickListener(v -> this._calculatorController.EnterExtraOperation("cos"));
+
+        button = this._activity.findViewById(R.id.buttonOperationSin);
+        button.setOnClickListener(v -> this._calculatorController.EnterExtraOperation("sin"));
+
+        button = this._activity.findViewById(R.id.buttonOperationLog);
+        button.setOnClickListener(v -> this._calculatorController.EnterExtraOperation("log"));
+
+        button = this._activity.findViewById(R.id.buttonOperationSqrt);
+        button.setOnClickListener(v -> this._calculatorController.EnterExtraOperation("√"));
     }
 }

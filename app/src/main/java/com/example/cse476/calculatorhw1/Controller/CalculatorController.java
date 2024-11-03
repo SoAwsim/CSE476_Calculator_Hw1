@@ -12,38 +12,42 @@ public class CalculatorController {
     private final TextView _formulaView;
     private boolean _inErrorState;
     private boolean _dotAllowed;
-    private OperationState _operationState;
+    private OperationState _operatorState;
+    private boolean _extraOperatorAllowed;
 
     public CalculatorController(ICalculator calculator, TextView formulaView) {
         this._calculator = calculator;
         this._formulaView = formulaView;
         this._inErrorState = false;
         this._dotAllowed = false;
-        this._operationState = OperationState.MINUS_ALLOWED;
+        this._operatorState = OperationState.MINUS_ALLOWED;
+        this._extraOperatorAllowed = true;
     }
 
     public void EnterDigit(int digit) {
         this.ClearErrorState();
+        this._extraOperatorAllowed = false;
         var newFormula = this._formulaView.getText().toString() + digit;
         this.DetermineDotCanBePlaced(newFormula);
-        this._operationState = OperationState.ALL_OPERATORS_ALLOWED;
+        this._operatorState = OperationState.ALL_OPERATORS_ALLOWED;
         this._formulaView.setText(newFormula);
     }
 
     public void EnterOperation(char operation) {
         this.ClearErrorState();
-        if (this._operationState == OperationState.ALL_OPERATORS_BANNED)
+        if (this._operatorState == OperationState.ALL_OPERATORS_BANNED)
             return;
 
-        if (this._operationState == OperationState.MINUS_ALLOWED && operation != '-')
+        if (this._operatorState == OperationState.MINUS_ALLOWED && operation != '-')
             return;
 
         // At this point operation is valid
+        this._extraOperatorAllowed = true;
         this._dotAllowed = false;
         if (operation == '/' || operation == 'x')
-            this._operationState = OperationState.MINUS_ALLOWED;
+            this._operatorState = OperationState.MINUS_ALLOWED;
         else
-            this._operationState = OperationState.ALL_OPERATORS_BANNED;
+            this._operatorState = OperationState.ALL_OPERATORS_BANNED;
 
         this._formulaView.setText(this._formulaView.getText().toString() + operation);
     }
@@ -53,7 +57,7 @@ public class CalculatorController {
         if (!this._dotAllowed)
             return;
         this._dotAllowed = false;
-        this._operationState = OperationState.ALL_OPERATORS_BANNED;
+        this._operatorState = OperationState.ALL_OPERATORS_BANNED;
         this._formulaView.setText(this._formulaView.getText().toString() + '.');
     }
 
@@ -66,6 +70,7 @@ public class CalculatorController {
         text = text.subSequence(0, text.length() - 1);
         this.DetermineDotCanBePlaced(text.toString());
         this.DetermineOperationState(text.toString());
+        this.DetermineExtraOperatorCanBePlaced(text.toString());
 
         this._formulaView.setText(text);
     }
@@ -73,7 +78,8 @@ public class CalculatorController {
     public void DeleteAll() {
         this.ClearErrorState();
         this._dotAllowed = false;
-        this._operationState = OperationState.MINUS_ALLOWED;
+        this._extraOperatorAllowed = true;
+        this._operatorState = OperationState.MINUS_ALLOWED;
         this._formulaView.setText("");
     }
 
@@ -103,6 +109,22 @@ public class CalculatorController {
         this._formulaView.setText(formula);
     }
 
+    public void EnterExtraOperation(String operator) {
+        ClearErrorState();
+        if (!this._extraOperatorAllowed)
+            return;
+
+        this._extraOperatorAllowed = false;
+        var text = this._formulaView.getText();
+
+        if (!operator.equals("sin") && !operator.equals("cos"))
+            this._operatorState = OperationState.ALL_OPERATORS_BANNED;
+        else
+            this._operatorState = OperationState.MINUS_ALLOWED;
+
+        this._formulaView.setText(text + operator);
+    }
+
     private void ClearErrorState() {
         if (!this._inErrorState)
             return;
@@ -125,16 +147,31 @@ public class CalculatorController {
 
     private void DetermineOperationState(String formula) {
         if (formula.isEmpty()) {
-            this._operationState = OperationState.MINUS_ALLOWED;
+            this._operatorState = OperationState.MINUS_ALLOWED;
             return;
         }
 
         var lastChar = formula.charAt(formula.length() - 1);
         if (Character.isDigit(lastChar))
-            this._operationState = OperationState.ALL_OPERATORS_ALLOWED;
+            this._operatorState = OperationState.ALL_OPERATORS_ALLOWED;
         else if (lastChar == '/' || lastChar == 'x')
-            this._operationState = OperationState.MINUS_ALLOWED;
+            this._operatorState = OperationState.MINUS_ALLOWED;
         else
-            this._operationState = OperationState.ALL_OPERATORS_BANNED;
+            this._operatorState = OperationState.ALL_OPERATORS_BANNED;
+    }
+
+    private void DetermineExtraOperatorCanBePlaced(String formula) {
+        if (formula.isEmpty()) {
+            this._extraOperatorAllowed = true;
+            return;
+        }
+
+        var lastChar = formula.charAt(formula.length() - 1);
+        if (ICalculator.IsOperator(lastChar)) {
+            this._extraOperatorAllowed = true;
+            return;
+        }
+
+        this._extraOperatorAllowed = false;
     }
 }

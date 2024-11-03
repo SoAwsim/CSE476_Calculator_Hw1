@@ -4,6 +4,15 @@ public interface ICalculator {
     char[] OPERATORS = {'+', '-', 'x', '/'};
     void SolveFormula(StringBuilder formula);
 
+    static boolean IsOperator(char character) {
+        for (var c : OPERATORS) {
+            if (c == character)
+                return true;
+        }
+
+        return false;
+    }
+
     static int FindIndexOfLastOperation(String formula) {
         if (formula.isEmpty())
             return -1;
