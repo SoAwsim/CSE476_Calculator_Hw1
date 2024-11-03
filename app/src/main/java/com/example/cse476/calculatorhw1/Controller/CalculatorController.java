@@ -3,18 +3,14 @@ package com.example.cse476.calculatorhw1.Controller;
 import android.annotation.SuppressLint;
 import android.widget.TextView;
 
-import com.example.cse476.calculatorhw1.Calculator.Calculator;
-
 @SuppressLint("SetTextI18n")
 public class CalculatorController {
     private static final char[] operators = {'+', '-', 'x', '/'};
-    private final Calculator _calculator;
     private final TextView _formulaView;
     private boolean _dotAllowed;
     private OperationState _operationState;
 
-    public CalculatorController(Calculator calculator, TextView formulaView) {
-        this._calculator = calculator;
+    public CalculatorController(TextView formulaView) {
         this._formulaView = formulaView;
         this._dotAllowed = false;
         this._operationState = OperationState.MINUS_ALLOWED;

@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 
-import com.example.cse476.calculatorhw1.Calculator.Calculator;
 import com.example.cse476.calculatorhw1.R;
 
 public class CalculatorControllerFactory {
@@ -18,9 +17,8 @@ public class CalculatorControllerFactory {
     }
     
     public void DefaultCalculatorController() {
-        var calculator = new Calculator();
         TextView formulaView = this._activity.findViewById(R.id.textView);
-        this._calculatorController = new CalculatorController(calculator, formulaView);
+        this._calculatorController = new CalculatorController(formulaView);
 
         HorizontalScrollView scrollView = this._activity.findViewById(R.id.formula_scroller);
         formulaView
