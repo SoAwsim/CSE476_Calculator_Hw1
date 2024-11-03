@@ -1,6 +1,7 @@
 package com.example.cse476.calculatorhw1.Controller;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.cse476.calculatorhw1.Calculator.ICalculator;
@@ -91,6 +92,11 @@ public class CalculatorController {
         } catch (NumberFormatException e) {
             this._inErrorState = true;
             this._formulaView.setText("Syntax Error");
+            return;
+        } catch (Exception e) {
+            this._inErrorState = true;
+            Log.wtf("Unhandled exception", e);
+            this._formulaView.setText("Err");
             return;
         }
 
