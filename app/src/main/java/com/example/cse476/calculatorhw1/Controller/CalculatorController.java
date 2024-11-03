@@ -3,15 +3,18 @@ package com.example.cse476.calculatorhw1.Controller;
 import android.annotation.SuppressLint;
 import android.widget.TextView;
 
+import com.example.cse476.calculatorhw1.Calculator.ICalculator;
+
 @SuppressLint("SetTextI18n")
 public class CalculatorController {
-    private static final char[] OPERATORS = {'+', '-', 'x', '/'};
+    private final ICalculator _calculator;
     private final TextView _formulaView;
     private boolean _inErrorState;
     private boolean _dotAllowed;
     private OperationState _operationState;
 
-    public CalculatorController(TextView formulaView) {
+    public CalculatorController(ICalculator calculator, TextView formulaView) {
+        this._calculator = calculator;
         this._formulaView = formulaView;
         this._inErrorState = false;
         this._dotAllowed = false;
@@ -80,8 +83,7 @@ public class CalculatorController {
             return;
 
         try {
-            SolveMultiplicationAndDivision(formula);
-            SolveAdditionAndSubtraction(formula);
+            this._calculator.SolveFormula(formula);
         } catch (ArithmeticException e) {
             this._inErrorState = true;
             this._formulaView.setText("NaN");
@@ -103,103 +105,13 @@ public class CalculatorController {
         this._formulaView.setText("");
     }
 
-    private static void SolveMultiplicationAndDivision(StringBuilder formula) throws ArithmeticException, NumberFormatException {
-        var indexOfMultiplicationOperation = formula.indexOf("x");
-        var indexOfDivisionOperation = formula.indexOf("/");
-
-        while (indexOfMultiplicationOperation >= 0 || indexOfDivisionOperation >= 0) {
-            int operationIndexToProcess;
-            boolean operationIsMultiply;
-
-            if (indexOfMultiplicationOperation >= 0 && indexOfDivisionOperation < 0) {
-                operationIndexToProcess = indexOfMultiplicationOperation;
-                operationIsMultiply = true;
-            }
-            else if (indexOfMultiplicationOperation < 0) {
-                operationIndexToProcess = indexOfDivisionOperation;
-                operationIsMultiply = false;
-            }
-            else if (indexOfMultiplicationOperation < indexOfDivisionOperation) {
-                operationIndexToProcess = indexOfMultiplicationOperation;
-                operationIsMultiply = true;
-            }
-            else {
-                operationIndexToProcess = indexOfDivisionOperation;
-                operationIsMultiply = false;
-            }
-
-            var leftNumberStart = FindIndexOfLastOperation(
-                    formula.substring(0, operationIndexToProcess)
-            ) + 1;
-
-            var rightNumberEnd = FindIndexOfFirstOperation(formula.substring(operationIndexToProcess + 1));
-            if (rightNumberEnd == -1)
-                rightNumberEnd = formula.length();
-            else
-                rightNumberEnd = rightNumberEnd + operationIndexToProcess + 1;
-
-            var leftNumber = Double.parseDouble(
-                    formula.substring(leftNumberStart, operationIndexToProcess));
-            var rightNumber = Double.parseDouble(
-                    formula.substring(operationIndexToProcess + 1, rightNumberEnd));
-
-            double result;
-            if (operationIsMultiply)
-                result = leftNumber * rightNumber;
-            else
-                result = leftNumber / rightNumber;
-
-            // throw ArithmeticException they are both treated as NaN
-            if (Double.isNaN(result) || Double.isInfinite(result))
-                throw new ArithmeticException();
-
-            Object resultAsObject;
-            if (Math.floor(result) == result)
-                resultAsObject = (int) result;
-            else
-                resultAsObject = result;
-
-            formula.replace(leftNumberStart, rightNumberEnd, resultAsObject.toString());
-
-            indexOfMultiplicationOperation = formula.indexOf("x");
-            indexOfDivisionOperation = formula.indexOf("/");
-        }
-    }
-
-    private static void SolveAdditionAndSubtraction(StringBuilder formula) {
-
-    }
-
-    private static int FindIndexOfLastOperation(String formula) {
-        var indexOfLastOperator = Integer.MIN_VALUE;
-        for (var c : OPERATORS) {
-            var foundIndex = formula.lastIndexOf(c);
-            if (foundIndex > indexOfLastOperator)
-                indexOfLastOperator = foundIndex;
-        }
-        return indexOfLastOperator;
-    }
-
-    private static int FindIndexOfFirstOperation(String formula) {
-        var indexOfFirstOperator = -1;
-        for (var c : OPERATORS) {
-            var foundIndex = formula.indexOf(c);
-            if (foundIndex == -1)
-                continue;
-
-            if (indexOfFirstOperator == -1 || foundIndex < indexOfFirstOperator)
-                indexOfFirstOperator = foundIndex;
-        }
-        return indexOfFirstOperator;
-    }
-
     private void DetermineDotCanBePlaced(String formula) {
         if (formula.isEmpty()) {
             this._dotAllowed = false;
             return;
         }
 
-        var indexOfLastOperator = FindIndexOfLastOperation(formula);
+        var indexOfLastOperator = ICalculator.FindIndexOfLastOperation(formula);
 
         var indexOfLastDot = formula.lastIndexOf('.');
         this._dotAllowed = indexOfLastDot <= indexOfLastOperator;
