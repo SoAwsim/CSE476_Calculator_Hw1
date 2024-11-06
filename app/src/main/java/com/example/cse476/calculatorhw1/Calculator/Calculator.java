@@ -224,7 +224,7 @@ public class Calculator implements ICalculator {
     }
 
     private void ValidateAndWriteResult(double result, MathOperationConstraints constraints) {
-        // throw ArithmeticException they are both treated as NaN
+        // Throw ArithmeticException they are both treated as NaN
         if (Double.isNaN(result) || Double.isInfinite(result))
             throw new ArithmeticException();
 
@@ -238,6 +238,26 @@ public class Calculator implements ICalculator {
                 constraints.LeftNumberStartIndex,
                 constraints.RightNumberEndIndex,
                 resultAsObject.toString());
+
+        // Fix double minus operator
+        if (constraints.LeftNumberStartIndex == 0)
+            return;
+
+        if (this._currentFormula.charAt(constraints.LeftNumberStartIndex) != '-')
+            return;
+
+        if (this._currentFormula.charAt(constraints.LeftNumberStartIndex - 1) != '-')
+            return;
+
+        var replace = "+";
+        if (constraints.LeftNumberStartIndex - 2 >= 0 &&
+                ICalculator.IsOperator(this._currentFormula.charAt(constraints.LeftNumberStartIndex)))
+            replace = "";
+
+        this._currentFormula.replace(
+                constraints.LeftNumberStartIndex - 1,
+                constraints.LeftNumberStartIndex + 1,
+                replace);
     }
 
     private static int DetermineNextOperation(
