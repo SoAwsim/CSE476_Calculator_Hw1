@@ -25,36 +25,13 @@ public class Calculator implements ICalculator {
         var indexOfCosOperator = this._currentFormula.indexOf("cos");
 
         while (indexOfCosOperator >= 0) {
-            var startIndexOfOperatorNumber = indexOfCosOperator + 3;
+            var cosNumber = this.FindCosSinNumber(indexOfCosOperator);
 
-            int afterOperatorIndex;
-            var numberToAdd = 0;
-            if (this._currentFormula.charAt(startIndexOfOperatorNumber) == '-') {
-                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
-                        this._currentFormula.substring(startIndexOfOperatorNumber + 1));
-                if (afterOperatorIndex != -1)
-                    numberToAdd = 4;
-            }
-            else {
-                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
-                        this._currentFormula.substring(startIndexOfOperatorNumber));
-                if (afterOperatorIndex != -1)
-                    numberToAdd = 3;
-            }
-
-            if (numberToAdd == 0)
-                afterOperatorIndex = this._currentFormula.length();
-            else
-                afterOperatorIndex += numberToAdd;
-
-            var number = Double.parseDouble(
-                    this._currentFormula.substring(
-                            startIndexOfOperatorNumber, afterOperatorIndex));
-
-            var result = Math.cos(number);
+            var result = Math.cos(cosNumber.Number);
             this.ValidateAndWriteResult(
                     result,
-                    new MathOperationConstraints(indexOfCosOperator, afterOperatorIndex));
+                    new MathOperationConstraints(
+                            indexOfCosOperator, cosNumber.AfterOperatorIndex));
 
             indexOfCosOperator = this._currentFormula.indexOf("cos");
         }
@@ -64,39 +41,46 @@ public class Calculator implements ICalculator {
         var indexOfSinOperator = this._currentFormula.indexOf("sin");
 
         while (indexOfSinOperator >= 0) {
-            var startIndexOfOperatorNumber = indexOfSinOperator + 3;
+            var sinNumber = this.FindCosSinNumber(indexOfSinOperator);
 
-            int afterOperatorIndex;
-            var numberToAdd = 0;
-            if (this._currentFormula.charAt(startIndexOfOperatorNumber) == '-') {
-                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
-                        this._currentFormula.substring(startIndexOfOperatorNumber + 1));
-                if (afterOperatorIndex != -1)
-                    numberToAdd = 4;
-            }
-            else {
-                afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
-                        this._currentFormula.substring(startIndexOfOperatorNumber));
-                if (afterOperatorIndex != -1)
-                    numberToAdd = 3;
-            }
-
-            if (numberToAdd == 0)
-                afterOperatorIndex = this._currentFormula.length();
-            else
-                afterOperatorIndex += numberToAdd;
-
-            var number = Double.parseDouble(
-                    this._currentFormula.substring(
-                            startIndexOfOperatorNumber, afterOperatorIndex));
-
-            var result = Math.sin(number);
+            var result = Math.sin(sinNumber.Number);
             this.ValidateAndWriteResult(
                     result,
-                    new MathOperationConstraints(indexOfSinOperator, afterOperatorIndex));
+                    new MathOperationConstraints(
+                            indexOfSinOperator, sinNumber.AfterOperatorIndex));
 
             indexOfSinOperator = this._currentFormula.indexOf("sin");
         }
+    }
+
+    private CosSinNumber FindCosSinNumber(int operatorIndex) {
+        operatorIndex += 3;
+
+        int afterOperatorIndex;
+        var numberToAdd = 0;
+        if (this._currentFormula.charAt(operatorIndex) == '-') {
+            afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                    this._currentFormula.substring(operatorIndex + 1));
+            if (afterOperatorIndex != -1)
+                numberToAdd = 4;
+        }
+        else {
+            afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                    this._currentFormula.substring(operatorIndex));
+            if (afterOperatorIndex != -1)
+                numberToAdd = 3;
+        }
+
+        if (numberToAdd == 0)
+            afterOperatorIndex = this._currentFormula.length();
+        else
+            afterOperatorIndex += numberToAdd;
+
+        var number = Double.parseDouble(
+                this._currentFormula.substring(
+                        operatorIndex, afterOperatorIndex));
+
+        return new CosSinNumber(number, afterOperatorIndex);
     }
 
     private void SolveLogOperator() {
@@ -272,6 +256,16 @@ public class Calculator implements ICalculator {
         }
 
         return Math.min(indexOfOperation0, indexOfOperation1);
+    }
+
+    private static class CosSinNumber {
+        public double Number;
+        public int AfterOperatorIndex;
+
+        public CosSinNumber(double number, int after) {
+            this.Number = number;
+            this.AfterOperatorIndex = after;
+        }
     }
 
     private class MathOperationConstraints {
