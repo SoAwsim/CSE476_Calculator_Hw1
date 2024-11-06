@@ -55,21 +55,19 @@ public class Calculator implements ICalculator {
 
     private ExtraOperatorNumber FindCosSinNumber(int numberIndex) {
         int afterOperatorIndex;
-        var numberToAdd = 0;
+        int numberToAdd;
         if (this._currentFormula.charAt(numberIndex) == '-') {
             afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
                     this._currentFormula.substring(numberIndex + 1));
-            if (afterOperatorIndex != -1)
-                numberToAdd = 4;
+            numberToAdd = numberIndex + 1;
         }
         else {
             afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
                     this._currentFormula.substring(numberIndex));
-            if (afterOperatorIndex != -1)
-                numberToAdd = 3;
+            numberToAdd = numberIndex;
         }
 
-        if (numberToAdd == 0)
+        if (afterOperatorIndex == -1)
             afterOperatorIndex = this._currentFormula.length();
         else
             afterOperatorIndex += numberToAdd;
@@ -85,8 +83,7 @@ public class Calculator implements ICalculator {
         var indexOfLogOperator = this._currentFormula.indexOf("log");
 
         while (indexOfLogOperator >= 0) {
-            var sqrtNumber = this.FindLogSqrtNumber(
-                    indexOfLogOperator + 3, 3);
+            var sqrtNumber = this.FindLogSqrtNumber(indexOfLogOperator + 3);
 
             var result = Math.log10(sqrtNumber.Number);
             this.ValidateAndWriteResult(
@@ -102,8 +99,7 @@ public class Calculator implements ICalculator {
         var indexOfSqrtOperator = this._currentFormula.indexOf("√");
 
         while (indexOfSqrtOperator >= 0) {
-            var sqrtNumber = this.FindLogSqrtNumber(
-                    indexOfSqrtOperator + 1, 1);
+            var sqrtNumber = this.FindLogSqrtNumber(indexOfSqrtOperator + 1);
 
             var result = Math.sqrt(sqrtNumber.Number);
             this.ValidateAndWriteResult(
@@ -115,14 +111,14 @@ public class Calculator implements ICalculator {
         }
     }
 
-    private ExtraOperatorNumber FindLogSqrtNumber(int numberIndex, int operatorLength) {
+    private ExtraOperatorNumber FindLogSqrtNumber(int numberIndex) {
         var afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
                 this._currentFormula.substring(numberIndex));
 
         if (afterOperatorIndex == -1)
             afterOperatorIndex = this._currentFormula.length();
         else
-            afterOperatorIndex += operatorLength;
+            afterOperatorIndex += numberIndex;
 
         var number = Double.parseDouble(
                 this._currentFormula.substring(
