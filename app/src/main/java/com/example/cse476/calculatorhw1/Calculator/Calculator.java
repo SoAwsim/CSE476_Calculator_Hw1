@@ -52,7 +52,7 @@ public class Calculator implements ICalculator {
                             startIndexOfOperatorNumber, afterOperatorIndex));
 
             var result = Math.cos(number);
-            ValidateAndWriteResult(
+            this.ValidateAndWriteResult(
                     result,
                     new MathOperationConstraints(indexOfCosOperator, afterOperatorIndex));
 
@@ -91,7 +91,7 @@ public class Calculator implements ICalculator {
                             startIndexOfOperatorNumber, afterOperatorIndex));
 
             var result = Math.sin(number);
-            ValidateAndWriteResult(
+            this.ValidateAndWriteResult(
                     result,
                     new MathOperationConstraints(indexOfSinOperator, afterOperatorIndex));
 
@@ -118,7 +118,7 @@ public class Calculator implements ICalculator {
                             startIndexOfOperatorNumber, afterOperatorIndex));
 
             var result = Math.log10(number);
-            ValidateAndWriteResult(
+            this.ValidateAndWriteResult(
                     result,
                     new MathOperationConstraints(indexOfLogOperator, afterOperatorIndex));
 
@@ -145,7 +145,7 @@ public class Calculator implements ICalculator {
                             startIndexOfOperatorNumber, afterOperatorIndex));
 
             var result = Math.sqrt(number);
-            ValidateAndWriteResult(
+            this.ValidateAndWriteResult(
                     result,
                     new MathOperationConstraints(indexOfSqrtOperator, afterOperatorIndex));
 
