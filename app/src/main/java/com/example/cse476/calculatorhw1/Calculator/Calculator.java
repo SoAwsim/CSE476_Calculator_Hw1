@@ -85,24 +85,14 @@ public class Calculator implements ICalculator {
         var indexOfLogOperator = this._currentFormula.indexOf("log");
 
         while (indexOfLogOperator >= 0) {
-            var startIndexOfOperatorNumber = indexOfLogOperator + 3;
+            var sqrtNumber = this.FindLogSqrtNumber(
+                    indexOfLogOperator + 3, 3);
 
-            var afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
-                    this._currentFormula.substring(startIndexOfOperatorNumber));
-
-            if (afterOperatorIndex == -1)
-                afterOperatorIndex = this._currentFormula.length();
-            else
-                afterOperatorIndex += 3;
-
-            var number = Double.parseDouble(
-                    this._currentFormula.substring(
-                            startIndexOfOperatorNumber, afterOperatorIndex));
-
-            var result = Math.log10(number);
+            var result = Math.log10(sqrtNumber.Number);
             this.ValidateAndWriteResult(
                     result,
-                    new MathOperationConstraints(indexOfLogOperator, afterOperatorIndex));
+                    new MathOperationConstraints(
+                            indexOfLogOperator, sqrtNumber.AfterOperatorIndex));
 
             indexOfLogOperator = this._currentFormula.indexOf("log");
         }
@@ -112,27 +102,33 @@ public class Calculator implements ICalculator {
         var indexOfSqrtOperator = this._currentFormula.indexOf("√");
 
         while (indexOfSqrtOperator >= 0) {
-            var startIndexOfOperatorNumber = indexOfSqrtOperator + 1;
+            var sqrtNumber = this.FindLogSqrtNumber(
+                    indexOfSqrtOperator + 1, 1);
 
-            var afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
-                    this._currentFormula.substring(startIndexOfOperatorNumber));
-
-            if (afterOperatorIndex == -1)
-                afterOperatorIndex = this._currentFormula.length();
-            else
-                afterOperatorIndex++;
-
-            var number = Double.parseDouble(
-                    this._currentFormula.substring(
-                            startIndexOfOperatorNumber, afterOperatorIndex));
-
-            var result = Math.sqrt(number);
+            var result = Math.sqrt(sqrtNumber.Number);
             this.ValidateAndWriteResult(
                     result,
-                    new MathOperationConstraints(indexOfSqrtOperator, afterOperatorIndex));
+                    new MathOperationConstraints(
+                            indexOfSqrtOperator, sqrtNumber.AfterOperatorIndex));
 
             indexOfSqrtOperator = this._currentFormula.indexOf("√");
         }
+    }
+
+    private ExtraOperatorNumber FindLogSqrtNumber(int numberIndex, int operatorLength) {
+        var afterOperatorIndex = ICalculator.FindIndexOfFirstOperation(
+                this._currentFormula.substring(numberIndex));
+
+        if (afterOperatorIndex == -1)
+            afterOperatorIndex = this._currentFormula.length();
+        else
+            afterOperatorIndex += operatorLength;
+
+        var number = Double.parseDouble(
+                this._currentFormula.substring(
+                        numberIndex, afterOperatorIndex));
+
+        return new ExtraOperatorNumber(number, afterOperatorIndex);
     }
 
     private void SolveMultiplicationAndDivision() {
