@@ -14,6 +14,6 @@ be found bellow.
 ## Running
 Clone the repo:
 ```bash
-git clone https://github.com/yourusername/your-repo-name.git
+git clone https://github.com/SoAwsim/CSE476_Calculator_Hw1
 ```
 Then build using Android Studio.
